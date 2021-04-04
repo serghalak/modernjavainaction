@@ -2,11 +2,8 @@ package modernjavainaction.chap06;
 
 import static java.util.stream.Collectors.groupingBy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.*;
 
 public class GroupingTransactions {
 
@@ -27,8 +24,25 @@ public class GroupingTransactions {
   );
 
   public static void main(String... args) {
-    groupImperatively();
-    groupFunctionally();
+    //groupImperatively();
+    //groupFunctionally();
+      randomGo();
+      
+  }
+
+  private static void randomGo(){
+      Random rnd=new Random();
+      int countPar=0;
+      int countNepar=0;
+      for(int i=0 ; i<1000000;i++){
+          int nextInt = rnd.nextInt();
+          if(nextInt%2==0){
+              countPar++;
+          }else{
+            countNepar++;
+          }
+      }
+      System.out.println("Parni: " + countPar + "    " + "Neparni: " +countNepar );
   }
 
   private static void groupImperatively() {
