@@ -2,6 +2,7 @@ package modernjavainaction.studycode.chap01;
 
 import modernjavainaction.chap01.FilteringApples.Apple;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,6 +27,16 @@ public class FilteringApples {
         inventory.sort(Comparator.comparing(Apple::getWeight));
 
         System.out.println(inventory);
+        getListFiles();
+    }
+
+    private static void getListFiles() {
+
+        final File[] files = new File(".").listFiles(File::isFile);
+        //System.out.println(Arrays.stream(files).map(file -> file.getName()));
+        for (File file: files) {
+            System.out.println(file.getName());
+        }
     }
 
 }
