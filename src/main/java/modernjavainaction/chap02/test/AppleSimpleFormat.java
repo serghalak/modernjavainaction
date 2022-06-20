@@ -1,7 +1,4 @@
-package modernjavainaction.chap02.test.impl;
-
-import modernjavainaction.chap02.test.Apple;
-import modernjavainaction.chap02.test.AppleFormater;
+package modernjavainaction.chap02.test;
 
 public class AppleSimpleFormat implements AppleFormater {
 
