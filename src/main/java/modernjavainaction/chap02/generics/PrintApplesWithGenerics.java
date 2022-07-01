@@ -15,7 +15,12 @@ public class PrintApplesWithGenerics {
                 new Apple(80, Color.GREEN),
                 new Apple(155, Color.GREEN),
                 new Apple(120, Color.RED));
+        //int[] arr = new int[]{1, 5, 8, 2, 4};
+        List<Integer> arrInt = new ArrayList<>(Arrays.asList(1, 5, 8, 2, 4));
         final List<Apple> filtr = filtr(inventory, apple -> apple.weight > 150);
+        final List<Integer> filtr1 = filtr(arrInt, num -> num > 4);
+        System.out.println(filtr1);
+
         System.out.println(filtr);
     }
 
@@ -32,7 +37,7 @@ public class PrintApplesWithGenerics {
 
     public static class Apple {
 
-        private int weight = 0;
+        private int weight;
         private Color color;
 
         public Apple(int weight, Color color) {

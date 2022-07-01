@@ -6,4 +6,6 @@ import java.io.IOException;
 public interface MyBuffredReaderProcessor {
 
     String process(BufferedReader reader) throws IOException;
+
+
 }
