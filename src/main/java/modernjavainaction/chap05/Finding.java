@@ -29,6 +29,7 @@ public class Finding {
   }
 
   private static boolean isHealthyMenu2() {
+
     return menu.stream().noneMatch(d -> d.getCalories() >= 1000);
   }
 
