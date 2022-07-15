@@ -4,6 +4,10 @@ import modernjavainaction.chap04.Dish;
 import modernjavainaction.chap05.Trader;
 import modernjavainaction.chap05.Transaction;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -18,7 +22,9 @@ public class MyTest {
         //getCountOfDishes();
         //getCountOfDishes1();
         //taskTransactionTraders();
-        getPiphagorTriple();
+        //getPiphagorTriple();
+        //getStream();
+        getUniqueWordsFromFile();
     }
 
     private static void getLengthOfWorlds() {
@@ -29,6 +35,8 @@ public class MyTest {
                 .collect(Collectors.toList());
         System.out.println(collect);
     }
+
+
 
     private static void getUniqLetters() {
         List<String> list = Arrays.asList("Hello", "World");
@@ -160,6 +168,33 @@ public class MyTest {
 
         //stream.forEach(ints -> System.out.println(ints[0] + ":" + ints[1] + "=" + ints[2]));
         //boxed.forEach(System.out::println);
+    }
+
+    private static void getStream() {
+
+        int[] numbers = {2, 3, 5, 7, 11, 13};
+        final IntStream stream = Arrays.stream(numbers);
+        int sum = Arrays.stream(numbers).sum();
+        System.out.println(sum);
+
+    }
+
+    private static void getUniqueWordsFromFile() {
+        long uniqueWords = 0;
+
+        try(Stream<String> lines =
+                    Files.lines(
+                            Paths.get("c://data.txt"),
+                            Charset.defaultCharset())) {
+            final Set<String> collect = lines
+                    .map(s -> s.split(" "))
+                    .flatMap(Arrays::stream)
+                    .collect(Collectors.toSet());
+
+            System.out.println(collect);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
