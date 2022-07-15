@@ -4,11 +4,9 @@ import modernjavainaction.chap04.Dish;
 import modernjavainaction.chap05.Trader;
 import modernjavainaction.chap05.Transaction;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class MyTest {
@@ -19,7 +17,8 @@ public class MyTest {
         //getDecard();
         //getCountOfDishes();
         //getCountOfDishes1();
-        taskTransactionTraders();
+        //taskTransactionTraders();
+        getPiphagorTriple();
     }
 
     private static void getLengthOfWorlds() {
@@ -80,7 +79,7 @@ public class MyTest {
     private static void taskTransactionTraders()  {
         final List<Transaction> collect = getTransaction().stream()
                 .filter(transaction -> transaction.getYear() == 2011)
-                .sorted((o1, o2) -> o1.getValue() - o2.getValue())
+                .sorted(Comparator.comparing(Transaction::getValue))
                 .collect(Collectors.toList());
         System.out.println(collect);
 
@@ -98,7 +97,7 @@ public class MyTest {
 
         final String collect2 = getTransaction().stream()
                 .map(transaction -> transaction.getTrader().getName())
-                .sorted((o1, o2) -> o1.compareTo(o2))
+                .sorted()
                 .collect(Collectors.joining(", "));
         System.out.println(collect2);
 
@@ -111,7 +110,7 @@ public class MyTest {
         final Optional<Integer> cambridge1 = getTransaction().stream()
                 .filter(transaction -> transaction.getTrader()
                         .getCity().equals("Cambridge"))
-                .map(transaction -> transaction.getValue())
+                .map(Transaction::getValue)
                 .reduce(Integer::sum);
         System.out.println(cambridge1.orElse(0));
 
@@ -142,6 +141,25 @@ public class MyTest {
                 new Transaction(alan, 2012, 950)
         );
         return transactions;
+    }
+
+    private static void getPiphagorTriple() {
+
+//        final List<int[]> collect = IntStream.rangeClosed(1, 100).boxed()
+//                .flatMap(a -> IntStream.rangeClosed(a, 100).boxed()
+//                        .map(b -> new int[]{a, b}))
+//                .collect(Collectors.toList());
+
+        //collect.forEach(ints -> System.out.println(ints[0] + ":" + ints[1]));
+
+        final List<int[]> collect = IntStream.rangeClosed(1, 100).boxed()
+                .flatMap(a -> IntStream.rangeClosed(a, 100)
+                        .filter(b -> Math.sqrt(a * a + b * b) % 1 == 0)
+                        .mapToObj(b -> new int[]{a, b, (int) Math.sqrt(a * a + b * b)}))
+                .collect(Collectors.toList());
+
+        //stream.forEach(ints -> System.out.println(ints[0] + ":" + ints[1] + "=" + ints[2]));
+        //boxed.forEach(System.out::println);
     }
 
 
