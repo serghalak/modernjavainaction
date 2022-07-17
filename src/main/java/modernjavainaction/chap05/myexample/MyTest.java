@@ -9,6 +9,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.IntSupplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -25,7 +26,9 @@ public class MyTest {
         //getPiphagorTriple();
         //getStream();
         //getUniqueWordsFromFile();
-        getFibonachi();
+        //getFibonachi();
+        //getGeneratedValue();
+        getGeneratedFibonachi();
     }
 
     private static void getLengthOfWorlds() {
@@ -206,5 +209,32 @@ public class MyTest {
 
     }
 
+    private static void getGeneratedValue() {
 
+        IntStream.generate(new IntSupplier() {
+            @Override
+            public int getAsInt() {
+                return 2;
+            }
+        }).limit(10)
+                .forEach(System.out::println);
+    }
+
+    private static void getGeneratedFibonachi() {
+        IntSupplier fib = new IntSupplier() {
+            private int previous = 0;
+            private int current = 1;
+            @Override
+            public int getAsInt() {
+                int oldPrevious = this.previous;
+                int nextValue = this.previous + this.current;
+                this.previous = this.current;
+                this.current = nextValue;
+                return oldPrevious;
+            }
+        };
+
+        IntStream.generate(fib).limit(10).forEach(System.out::println);
+
+    }
 }
