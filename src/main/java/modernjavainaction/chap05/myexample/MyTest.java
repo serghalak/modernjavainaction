@@ -24,7 +24,8 @@ public class MyTest {
         //taskTransactionTraders();
         //getPiphagorTriple();
         //getStream();
-        getUniqueWordsFromFile();
+        //getUniqueWordsFromFile();
+        getFibonachi();
     }
 
     private static void getLengthOfWorlds() {
@@ -187,14 +188,22 @@ public class MyTest {
                             Paths.get("c://data.txt"),
                             Charset.defaultCharset())) {
             final Set<String> collect = lines
-                    .map(s -> s.split(" "))
-                    .flatMap(Arrays::stream)
+                    .flatMap(s -> Arrays.stream(s.split(" ")))
                     .collect(Collectors.toSet());
 
             System.out.println(collect);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void getFibonachi() {
+
+        Stream.iterate(new int[]{0, 1}, i ->
+            new int[] {i[1], (i[0] + i[1])})
+                .limit(5)
+                .forEach(t -> System.out.println(t[0] + ":" +t[1]));
+
     }
 
 
