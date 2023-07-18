@@ -12,7 +12,36 @@ public class MyTest {
     public static void main(String[] args) {
         //getListTransactionForCurrency();
         //getTotalCountDishes();
-        getMaxCalories();
+        //getMaxCalories();
+        //getSumaCalories();
+        //getSummarizing();
+        getOptional();
+    }
+
+    private static void getOptional() {
+        List<Optional<String>> listOfOptionals = Arrays.asList(
+                Optional.empty(),
+                //Optional.of("foo"),
+                Optional.empty()
+                //Optional.of("bar")
+                );
+        List<String> filteredList = listOfOptionals.stream()
+                .flatMap(Optional::stream)
+                .collect(Collectors.toList());
+        System.out.println(filteredList);
+    }
+
+    private static void getSummarizing() {
+
+        final IntSummaryStatistics collect = Dish.menu.stream()
+                .collect(Collectors.summarizingInt(Dish::getCalories));
+        System.out.println("Summarizing Info: " + collect);
+    }
+
+    private static void getSumaCalories() {
+        final Integer collect = Dish.menu.stream()
+                .collect(Collectors.summingInt(Dish::getCalories));
+        System.out.println("Total calories: " + collect);
     }
 
     private static void getListTransactionForCurrency() {

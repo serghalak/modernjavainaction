@@ -1,24 +1,17 @@
 package modernjavainaction.chap12;
 
+import org.w3c.dom.ls.LSOutput;
+
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.nextOrSame;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
+import java.time.*;
 import java.time.chrono.JapaneseDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -34,10 +27,12 @@ public class DateTimeExamples {
   };
 
   public static void main(String[] args) {
-    useOldDate();
-    useLocalDate();
-    useTemporalAdjuster();
-    useDateFormatter();
+//    useOldDate();
+//    useLocalDate();
+//    useTemporalAdjuster();
+//    useDateFormatter();
+//    operationWithDate();
+    dateTimeWithTimeZone();
   }
 
   private static void useOldDate() {
@@ -85,14 +80,26 @@ public class DateTimeExamples {
 
     Instant instant = Instant.ofEpochSecond(44 * 365 * 86400);
     Instant now = Instant.now();
+    System.out.println("instance->" + instant);
+
+    Period tenDays = Period.between(LocalDate.of(2017, 9, 11),
+            LocalDate.of(2017, 9, 21));
+    Period period = Period.between(LocalDate.of(2017, 9, 11),
+            LocalDate.of(3000, 10, 13));
+    System.out.println("period: "
+            + period.getYears()
+            + " year(s) " + period.getMonths()
+            + " month(s) " + period.getDays() + " day(s)"
+    );
 
     Duration d1 = Duration.between(LocalTime.of(13, 45, 10), time);
     Duration d2 = Duration.between(instant, now);
     System.out.println(d1.getSeconds());
-    System.out.println(d2.getSeconds());
+    System.out.println("Amount of seconds: " + d2.getSeconds());
+
 
     Duration threeMinutes = Duration.of(3, ChronoUnit.MINUTES);
-    System.out.println(threeMinutes);
+    System.out.println("3 minutes after 1970: " + threeMinutes);
 
     JapaneseDate japaneseDate = JapaneseDate.from(date);
     System.out.println(japaneseDate);
@@ -163,6 +170,44 @@ public class DateTimeExamples {
         .toFormatter(Locale.ITALIAN);
 
     System.out.println(date.format(complexFormatter));
+  }
+
+  private static void operationWithDate() {
+    LocalDate date1 = LocalDate.of(2017, 9, 21);
+    LocalDate date2 = date1.withYear(2011);
+    System.out.println("change year: " + date2);
+    LocalDate date3 = date2.withDayOfMonth(25);
+    System.out.println("change day of month: " + date3);
+    LocalDate date4 = date3.with(ChronoField.MONTH_OF_YEAR, 2);
+    System.out.println("change month of the year: " + date4);
+
+    LocalDate date5 = date1.plusWeeks(1);
+    System.out.println("add 1 week: " + date5);
+    LocalDate date6 = date5.plus(6, ChronoUnit.MONTHS);
+    System.out.println("add 6 months: " + date6);
+  }
+
+  private static void dateTimeWithTimeZone() {
+    ZoneId romeZone = ZoneId.of("Europe/Rome");
+    LocalDate date = LocalDate.of(2014, Month.MARCH, 18);
+    ZonedDateTime zdt1 = date.atStartOfDay(romeZone);
+    System.out.println("with italian timezone: " + zdt1);
+    LocalDateTime dateTime = LocalDateTime.of(2014, Month.MARCH, 18, 13, 45);
+    ZonedDateTime zdt2 = dateTime.atZone(romeZone);
+    System.out.println("with italian timezone: " + zdt2);
+    Instant instant = Instant.now();
+    System.out.println("instant.now(): " + instant);
+    ZonedDateTime zdt3 = instant.atZone(romeZone);
+    System.out.println("with italian timezone: " + zdt3);
+
+    LocalDateTime dateTime1 = LocalDateTime.of(2014, Month.MARCH, 18, 13, 45);
+    Instant instantFromDateTime = dateTime1.toInstant(romeZone.getRules().getOffset(dateTime1));
+    System.out.println("instantFromDateTime: " + instantFromDateTime);
+
+    Instant instant1 = Instant.now();
+    System.out.println("Instant.now(): " + instant1);
+    LocalDateTime timeFromInstant = LocalDateTime.ofInstant(instant1, romeZone);
+    System.out.println("timeFromInstant: " + timeFromInstant);
   }
 
 }
