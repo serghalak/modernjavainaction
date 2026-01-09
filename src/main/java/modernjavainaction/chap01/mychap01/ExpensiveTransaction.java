@@ -15,14 +15,21 @@ public class ExpensiveTransaction {
 
     public static void main(String[] args) {
 
+        List<Apple> inventory = Arrays.asList(
+                new Apple(80, Color.GREEN.name()),
+                new Apple(155,Color.GREEN.name() ),
+                new Apple(120, Color.RED.name())
+        );
+
         //getExpensiveTransaction();
         //getExpensiveTransactionStream();
+        System.out.println(filterGreenApples(inventory));
 
     }
 
     private static List<Apple>filterGreenApples(List<Apple>inventory){
         return  inventory.stream()
-                .filter(apple -> Color.GREEN.equals(apple.getColor()))
+                .filter(apple -> Color.GREEN.name().equals(apple.getColor()))
                 .collect(Collectors.toList());
     }
 
