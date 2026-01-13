@@ -1,5 +1,11 @@
 package modernjavainaction.chap02;
 
+import modernjavainaction.chap02.test.AppleColorAndWeightStringImpl;
+import modernjavainaction.chap02.test.AppleColorStringImpl;
+import modernjavainaction.chap02.test.AppleString;
+import modernjavainaction.chap02.test.AppleWeightStringImpl;
+import modernjavainaction.chap02.test.AppleWeightStringImpl;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +50,11 @@ public class FilteringApples {
 
     final List<Apple> filter = filter(inventory, a -> a.getColor() == Color.RED);
     System.out.println(filter);
+
+
+    printAppleString(inventory, new AppleColorStringImpl());
+    printAppleString(inventory, new AppleWeightStringImpl());
+    printAppleString(inventory, new AppleColorAndWeightStringImpl());
   }
 
   public static List<Apple> filterGreenApples(List<Apple> inventory) {
@@ -156,6 +167,12 @@ public class FilteringApples {
       return apple.getColor() == Color.RED && apple.getWeight() > 150;
     }
 
+  }
+
+  static void printAppleString(List<Apple> apples, AppleString appleString) {
+    for (Apple apple : apples) {
+        System.out.println(appleString.getAppleString(apple));
+    }
   }
 
 }
