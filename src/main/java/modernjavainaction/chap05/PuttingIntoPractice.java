@@ -29,7 +29,7 @@ public class PuttingIntoPractice {
             .filter(t -> t.getYear() == 2011)
             .sorted(Comparator.comparingInt(Transaction::getValue))
             .forEach(System.out::println);
-    System.out.println("//-----------end");
+    System.out.println("//-----------start");
 
     transactions.stream()
             .map(t -> t.getTrader().getCity())
@@ -73,7 +73,12 @@ public class PuttingIntoPractice {
       System.out.println("Lowest value in all the transactions: " + reduceMin.get());
     }
 
-    System.out.println("//-----------start");
+    int sum = transactions.stream()
+            .mapToInt(Transaction::getValue)
+            .sum();
+    System.out.println("Sum of all transactions: " + sum);
+
+    System.out.println("//-----------end");
     //if (true) return;
 
     // Query 1: Find all transactions from year 2011 and sort them by value (small to high).
