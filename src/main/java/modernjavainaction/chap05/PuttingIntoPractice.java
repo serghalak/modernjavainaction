@@ -1,11 +1,12 @@
 package modernjavainaction.chap05;
 
-import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.toList;
-
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 
 public class PuttingIntoPractice {
 
@@ -23,6 +24,57 @@ public class PuttingIntoPractice {
         new Transaction(mario, 2012, 700),
         new Transaction(alan, 2012, 950)
     );
+
+    transactions.stream()
+            .filter(t -> t.getYear() == 2011)
+            .sorted(Comparator.comparingInt(Transaction::getValue))
+            .forEach(System.out::println);
+    System.out.println("//-----------end");
+
+    transactions.stream()
+            .map(t -> t.getTrader().getCity())
+            .distinct()
+            .forEach(System.out::println);
+    transactions.stream()
+            .filter(t -> t.getTrader().getName().equals("Cambridge"))
+            .sorted(comparing((Transaction o) -> o.getTrader().getName()))
+            .forEach(System.out::println);
+
+    transactions.stream()
+            .map(t -> t.getTrader().getName())
+            .distinct()
+            .sorted(comparing(String::toLowerCase))
+            .forEach(System.out::println);
+
+    Optional<Transaction> milan = transactions.stream()
+            .filter(transaction -> transaction.getTrader().getCity().equals("Milan"))
+            .findAny();
+    if (milan.isPresent()) {
+        System.out.println("Milan based trader found: " + milan.get());
+    }
+
+    Integer cambridge = transactions.stream()
+            .filter(t -> t.getTrader().getCity().equals("Cambridge"))
+            .map(Transaction::getValue)
+            .reduce(0, Integer::sum);
+    System.out.println("Total value of transactions from traders living in Cambridge: " + cambridge);
+
+    Optional<Integer> reduce = transactions.stream()
+            .map(Transaction::getValue)
+            .reduce(Integer::max);
+    if (reduce.isPresent()) {
+      System.out.println("Highest value in all the transactions: " + reduce.get());
+    }
+
+    Optional<Integer> reduceMin = transactions.stream()
+            .map(Transaction::getValue)
+            .reduce(Integer::min);
+    if (reduceMin.isPresent()) {
+      System.out.println("Lowest value in all the transactions: " + reduceMin.get());
+    }
+
+    System.out.println("//-----------start");
+    //if (true) return;
 
     // Query 1: Find all transactions from year 2011 and sort them by value (small to high).
     List<Transaction> tr2011 = transactions.stream()
