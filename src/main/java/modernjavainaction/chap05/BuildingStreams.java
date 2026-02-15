@@ -11,12 +11,35 @@ import java.util.stream.Stream;
 public class BuildingStreams {
 
   public static void main(String... args) throws Exception {
+
+    System.out.println("-------------start-------------");
+//    String homeValue = System.getenv("path");
+//    Stream<String> homeValuesStream = homeValue == null ? Stream.empty() : Stream.of(homeValue);
+//    homeValuesStream.flatMap(s -> Arrays.stream(s.split(";"))).forEach(System.out::println);
+    Stream<String> values =
+            Stream.of("config", "user.home", "user")
+                    .flatMap(key -> {
+                      String prop = System.getProperty(key);
+                      // skip null or empty properties, split non-null values into stream, trim and ignore empty parts
+                      return (prop == null || prop.isEmpty())
+                              ? Stream.empty()
+                              : Arrays.stream(prop.split("\\\\"))
+                                      .map(String::trim)
+                                      .filter(s -> !s.isEmpty());
+                    });
+    values.forEach(System.out::println);
+
+//    Stream.ofNullable(Arrays.stream(System.getProperties()))
+//        .forEach(System.out::println);
+
+//    Properties properties = System.getProperties();
+//    properties.stringPropertyNames().stream().forEach(System.out::println);
+
+    System.out.println("-------------end-------------");
+
     // Stream.of
     Stream<String> stream = Stream.of("Java 8", "Lambdas", "In", "Action");
     stream.map(String::toUpperCase).forEach(System.out::println);
-
-    // Stream.empty
-    Stream<String> emptyStream = Stream.empty();
 
     // Arrays.stream
     int[] numbers = { 2, 3, 5, 7, 11, 13 };
@@ -47,12 +70,8 @@ public class BuildingStreams {
         .limit(5)
         .forEach(System.out::println);
 
-    IntStream.generate(new IntSupplier() {
-      @Override
-      public int getAsInt() {
-        return 2;
-      }
-    }).limit(5).forEach(System.out::println);
+    // replaced anonymous IntSupplier with a simple lambda
+    IntStream.generate(() -> 2).limit(5).forEach(System.out::println);
 
     IntSupplier fib = new IntSupplier() {
 
@@ -72,10 +91,19 @@ public class BuildingStreams {
         .limit(10)
         .forEach(System.out::println);
 
-    long uniqueWords = Files.lines(Paths.get("lambdasinaction/chap5/data.txt"), Charset.defaultCharset())
-        .flatMap(line -> Arrays.stream(line.split(" ")))
-        .distinct()
-        .count();
+
+    var resource = BuildingStreams.class.getClassLoader()
+            .getResource("modernjavainaction/chap05/data.txt");
+
+    if (resource == null) {
+      throw new RuntimeException("File not founded в resources!");
+    }
+    long uniqueWords;
+    try (Stream<String> lines = Files.lines(Paths.get(resource.toURI()), Charset.defaultCharset())) {
+      uniqueWords = lines.flatMap(line -> Arrays.stream(line.split(" ")))
+          .distinct()
+          .count();
+    }
 
     System.out.println("There are " + uniqueWords + " unique words in data.txt");
   }
