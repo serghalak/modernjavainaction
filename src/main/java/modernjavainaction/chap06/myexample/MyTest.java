@@ -3,11 +3,18 @@ package modernjavainaction.chap06.myexample;
 import modernjavainaction.chap05.Trader;
 import modernjavainaction.chap05.Transaction;
 import modernjavainaction.chap06.Dish;
+import modernjavainaction.chap06.GroupingTransactions;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.maxBy;
+import static modernjavainaction.chap06.Dish.dishTags;
+
 public class MyTest {
+
+
+    public enum CaloricLevel {DIET, NORMAL, FAT};
 
     public static void main(String[] args) {
         //getListTransactionForCurrency();
@@ -15,7 +22,105 @@ public class MyTest {
         //getMaxCalories();
         //getSumaCalories();
         //getSummarizing();
-        getOptional();
+        //getOptional();
+        //getGroupingBy();
+        //getGroupingByCaloricLevel();
+        //getCaloricDishesByType();
+        //getCaloricDishesNamesByType();
+        //dishNamesByType();
+        //dishesByTypeCaloricLevel();
+        //getGroupingByDishTypeCount();
+        //getMostCaloricByType();
+        //getMostCaloricByTypeWithoutOptional();
+        //getVegetarianDishesByType();
+        getMostCaloricPartitionedByVegetarian();
+    }
+
+    private static void getMostCaloricPartitionedByVegetarian() {
+        Map<Boolean, Dish> collect = Dish.menu.stream()
+                .collect(Collectors.partitioningBy(Dish::isVegetarian,
+                        Collectors.collectingAndThen(maxBy(Comparator.comparingInt(Dish::getCalories)), Optional::get)));
+        System.out.println(collect);
+    }
+
+    private static void getVegetarianDishesByType() {
+        Map<Boolean, Map<Dish.Type, List<Dish>>> collect = Dish.menu.stream()
+                .collect(Collectors.partitioningBy(Dish::isVegetarian, Collectors.groupingBy(Dish::getType)));
+        System.out.println(collect);
+    }
+
+
+    private static void getMostCaloricByTypeWithoutOptional() {
+        Map<Dish.Type, Dish> collect = Dish.menu.stream()
+                .collect(Collectors.groupingBy(Dish::getType,
+                        Collectors.collectingAndThen(
+                                maxBy(Comparator.comparingInt(Dish::getCalories)),
+                                Optional::get
+                        )));
+        System.out.println(collect);
+    }
+
+    private static void getMostCaloricByType() {
+        Map<Dish.Type, Optional<Dish>> collect = Dish.menu.stream()
+                .collect(Collectors.groupingBy(Dish::getType, maxBy(Comparator.comparingInt(Dish::getCalories))));
+        System.out.println(collect);
+    }
+
+    private static void getGroupingByDishTypeCount() {
+        Map<Dish.Type, Long> collect = Dish.menu.stream()
+                .collect(Collectors.groupingBy(Dish::getType, Collectors.counting()));
+        System.out.println(collect);
+    }
+
+    private static void dishesByTypeCaloricLevel() {
+        Map<Dish.Type, Map<CaloricLevel, List<Dish>>> collect = Dish.menu.stream()
+                .collect(Collectors.groupingBy(Dish::getType,
+                        Collectors.groupingBy(dish -> {
+                            if (dish.getCalories() <= 400) return CaloricLevel.DIET;
+                            else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
+                            else return CaloricLevel.FAT;
+                        })));
+        System.out.println(collect);
+    }
+
+    private static void dishNamesByType() {
+        Map<Dish.Type, Set<String>> collect = Dish.menu.stream()
+                .collect(Collectors.groupingBy(Dish::getType,
+                        Collectors.flatMapping(dish -> dishTags.get(dish.getName()).stream(), Collectors.toSet())
+                ));
+        System.out.println(collect);
+    }
+
+    private static void getGroupingByCaloricLevel() {
+        Map<CaloricLevel, List<Dish>> collect = Dish.menu.stream()
+                .collect(Collectors.groupingBy(dish -> {
+                    if (dish.getCalories() <= 400) return CaloricLevel.DIET;
+                    else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
+                    else return CaloricLevel.FAT;
+                }));
+        System.out.println(collect);
+    }
+
+    private static void getCaloricDishesByType() {
+        Map<Dish.Type, List<Dish>> collect = Dish.menu.stream()
+                .collect(Collectors.groupingBy(Dish::getType,
+                        Collectors.filtering(o -> o.getCalories() > 500, Collectors.toList())
+                ));
+        System.out.println(collect);
+    }
+
+    private static void getCaloricDishesNamesByType() {
+        Map<Dish.Type, List<String>> collect = Dish.menu.stream()
+                .collect(Collectors.groupingBy(Dish::getType,
+                        Collectors.mapping(Dish::getName, Collectors.toList())));
+        System.out.println(collect);
+    }
+
+    private static void getGroupingBy() {
+        Map<GroupingTransactions.Currency, List<GroupingTransactions.Transaction>> collect =
+                GroupingTransactions.transactions.stream()
+                        .collect(Collectors.groupingBy(GroupingTransactions.Transaction::getCurrency));
+        System.out.println(collect);
     }
 
     private static void getOptional() {
@@ -24,7 +129,7 @@ public class MyTest {
                 //Optional.of("foo"),
                 Optional.empty()
                 //Optional.of("bar")
-                );
+        );
         List<String> filteredList = listOfOptionals.stream()
                 .flatMap(Optional::stream)
                 .collect(Collectors.toList());
@@ -58,7 +163,7 @@ public class MyTest {
         final long count = Dish.menu.stream().count();
 
         System.out.println("count dishes: " + collect);
-        System.out.println("count dishes: "  + count);
+        System.out.println("count dishes: " + count);
     }
 
     private static void getMaxCalories() {
@@ -67,7 +172,7 @@ public class MyTest {
                 Comparator.comparingInt(Dish::getCalories);
 
         final Optional<Dish> collect = Dish.menu.stream()
-                .collect(Collectors.maxBy(dishCaloriesComparator));
+                .collect(maxBy(dishCaloriesComparator));
         final Dish dish = collect.orElse(null);
         System.out.println(dish.getCalories());
     }
