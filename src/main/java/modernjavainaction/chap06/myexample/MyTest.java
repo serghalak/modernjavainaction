@@ -37,6 +37,7 @@ public class MyTest {
     }
 
     private static void getMostCaloricPartitionedByVegetarian() {
+        System.out.println(Runtime.getRuntime().availableProcessors());
         Map<Boolean, Dish> collect = Dish.menu.stream()
                 .collect(Collectors.partitioningBy(Dish::isVegetarian,
                         Collectors.collectingAndThen(maxBy(Comparator.comparingInt(Dish::getCalories)), Optional::get)));
