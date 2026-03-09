@@ -78,21 +78,23 @@ public class WorkingWithCollections {
 
   private static void computingOnMaps() {
     Map<String, List<String>> friendsToMovies = new HashMap<>();
-
-    System.out.println("--> Adding a friend and movie in a verbose way");
-    String friend = "Raphael";
-    List<String> movies = friendsToMovies.get(friend);
-    if (movies == null) {
-       movies = new ArrayList<>();
-       friendsToMovies.put(friend, movies);
-    }
-    movies.add("Star Wars");
-    System.out.println(friendsToMovies);
+    List<String> test = new ArrayList<>();
+            test.add("Jack Reacher 2");
+    friendsToMovies.put("Raphael", test);
+//    System.out.println("--> Adding a friend and movie in a verbose way");
+//    String friend = "Raphael";
+//    List<String> movies = friendsToMovies.get(friend);
+//    if (movies == null) {
+//       movies = new ArrayList<>();
+//       friendsToMovies.put(friend, movies);
+//    }
+//    movies.add("Star Wars");
+//    System.out.println(friendsToMovies);
 
     System.out.println("--> Adding a friend and movie using computeIfAbsent()");
-    friendsToMovies.clear();
-    friendsToMovies.computeIfAbsent("Raphael", name -> new ArrayList<>())
-        .add("Star Wars");
+    //friendsToMovies.clear();
+    friendsToMovies.computeIfAbsent("Raphael", name -> new ArrayList<>());
+       // .add("Star Wars");
     System.out.println(friendsToMovies);
   }
 

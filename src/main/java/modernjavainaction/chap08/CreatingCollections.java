@@ -15,8 +15,8 @@ public class CreatingCollections {
 
   public static void main(String[] args) {
     creatingLists();
-    creatingSets();
-    creatingMaps();
+//    creatingSets();
+//    creatingMaps();
   }
 
   private static void creatingLists() {
