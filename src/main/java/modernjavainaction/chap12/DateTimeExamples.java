@@ -32,7 +32,27 @@ public class DateTimeExamples {
 //    useTemporalAdjuster();
 //    useDateFormatter();
 //    operationWithDate();
-    dateTimeWithTimeZone();
+    //dateTimeWithTimeZone();
+    testLocalDateTime();
+  }
+
+  private static void testLocalDateTime() {
+    Period tenDays = Period.between(LocalDate.of(2026, 2, 23),
+            LocalDate.of(2026, 4, 12));
+    LocalDateTime start = LocalDate.of(2026, 2, 23).atTime(LocalTime.MIDNIGHT);
+    LocalDateTime end = LocalDate.of(2026, 4, 12).atTime(LocalTime.of(12,0,0));
+    LocalDateTime today = LocalDateTime.now();
+
+    long daysAll = ChronoUnit.HOURS.between(start, end);
+    long daysByToday = ChronoUnit.HOURS.between(start, today);
+    double percent = (double) daysByToday / daysAll * 100;
+
+    System.out.println("period: " + tenDays);
+    System.out.println("days all: " + daysAll);
+    System.out.println("days all: " + daysAll/24);
+    System.out.println("hours by today: " + daysByToday);
+    System.out.println("days: " + percent + "%");
+    System.out.println("my percent: " + ((daysByToday / 12.0) ) + "%");
   }
 
   private static void useOldDate() {
