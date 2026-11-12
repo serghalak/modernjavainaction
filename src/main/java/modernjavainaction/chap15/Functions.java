@@ -25,11 +25,13 @@ public class Functions {
     return x + 1;
   }
 
-  public static Integer fo(int x) {
+  public static Integer fo(int x) throws InterruptedException {
+    Thread.sleep(3000);
     return Integer.valueOf(x * 2);
   }
 
-  public static Integer go(int x) {
+  public static Integer go(int x) throws InterruptedException {
+    Thread.sleep(3000);
     return Integer.valueOf(x + 1);
   }
 

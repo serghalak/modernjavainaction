@@ -17,6 +17,7 @@ public class CallbackStyleExample {
       result.right = z;
       System.out.println((result.left + result.right));
     });
+    System.out.println("Done with main");
   }
 
   private static class Result {
@@ -24,11 +25,21 @@ public class CallbackStyleExample {
     private int right;
   }
 
-  private static void f(int x, IntConsumer dealWithResult) {
-    dealWithResult.accept(Functions.f(x));
+  private static void f(int x, IntConsumer dealWithResult)  {
+//      try {
+//          Thread.sleep(5000);
+//      } catch (InterruptedException e) {
+//          throw new RuntimeException(e);
+//      }
+      dealWithResult.accept(Functions.f(x));
   }
 
   private static void g(int x, IntConsumer dealWithResult) {
+//    try {
+//      Thread.sleep(5000);
+//    } catch (InterruptedException e) {
+//      throw new RuntimeException(e);
+//    }
     dealWithResult.accept(Functions.g(x));
   }
 
